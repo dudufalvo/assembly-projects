@@ -1,0 +1,26 @@
+.data
+array: .word 1, 2, 3, 4, 52, 23, 7213
+.text
+
+main:
+	la $t0, array
+	li $s1, 7	#counter
+	
+	li $s5, 0	#maior
+	
+	loop:
+		lw $s0, 0($t0)
+		blt $s0, $s5, menor
+		move $s5, $s0
+	menor:
+		addi $t0, $t0, 4
+		addi $s1, $s1, -1
+		bnez $s1, loop
+
+exit:
+	move $a0, $s5
+	li $v0, 1
+	syscall
+
+	li $v0, 10
+	syscall

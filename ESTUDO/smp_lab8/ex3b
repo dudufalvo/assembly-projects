@@ -1,0 +1,36 @@
+.data
+frase: .asciiz "o rato roeu a roupa do rei de roma"
+espaco: .asciiz " "
+.text
+
+findwordswithchar:
+	la $s0, frase
+	la $t5, espaco
+	lb $t5, 0($t5)
+	li $s1, 34
+	li $t2, 1
+	
+	li $v0, 12
+	syscall
+	move $t0, $v0
+	
+	li $t9, 0
+	loop:
+		lb $t1, 0($s0)
+		bne $t1, $t5, mesma
+		li $t2, 1
+	mesma:
+		bne $t1, $t0, salta
+		beq $t2, $zero, salta
+		addi $t9, $t9, 1
+		li $t2, 0
+	salta:
+		addi $s0, $s0, 1
+		addi $s1, $s1, -1
+		bne $s1, $0, loop
+	move $a0, $t9
+	li $v0, 1
+	syscall
+exit:
+	li $v0, 10
+	syscall

@@ -1,0 +1,30 @@
+.data
+
+.text
+main:
+	li $v0, 5
+	syscall
+	move $s0, $v0	#read first value
+	
+	li $v0, 5
+	syscall
+	move $s1, $v0	#read second value
+	
+	addi $t0, $s0, 0
+	addi $s1, $s1, -1
+	
+	loop:
+		addi $s1, $s1, -1
+		
+		mult $s0, $t0
+		mflo $s0
+		
+		bne $s1, $zero, loop
+print:
+	move $a0, $s0
+	li $v0, 1
+	syscall
+exit:
+	li $v0, 10
+	syscall
+	

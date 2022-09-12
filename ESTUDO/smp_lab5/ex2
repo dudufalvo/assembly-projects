@@ -1,0 +1,27 @@
+	.data
+
+texto:	.asciiz " "
+	.text
+
+main:
+	li $v0, 5
+	syscall
+	move $t0, $v0	#var
+
+	li $t1, 2
+	mult $t0, $t1
+	mflo $t2	#fim = var*2
+	
+	addi $t0, $t0, 1	#var+=1
+	
+loop:
+	li $v0, 1
+	move $a0, $t0
+	syscall			#print do valor atual de var
+	
+	li $v0, 4
+	la $a0, texto
+	syscall
+	
+	addi $t0, $t0, 1	#var+=1
+	ble $t0, $t2, loop	#enquanto var != var*2

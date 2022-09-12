@@ -1,0 +1,76 @@
+.data
+tab1: .word 10, 20, 30, 40, 50, 60, 70, 80
+tab2: .word 1, 2, 1, 2, 1, 0
+tabres: .space 50
+.text
+
+main:
+	la $a0, tabres
+	la $a1, tab1
+	la $a2, tab2
+	
+	jal prod_Tabelas
+	move $t1, $v0
+	
+	la $t0, tabres
+	
+	loop2:
+	lw $a0, 0($t0)
+	li $v0, 1
+	syscall
+	addi $t1, $t1, -1
+	addi $t0, $t0, 4
+	bnez $t1, loop2
+
+	j exit
+	
+prod_Tabelas:
+	#int prodTabelas(int *tabRes, int *tab1, int *tab2);
+	# a0 - enderoco da tabela res
+	# a1 - endereco da tabela 1
+	# a2 - enderoco da tabela 2
+	addi $sp, $sp, -16
+	sw $ra, 0($sp)
+	sw $a0, 4($sp)
+	sw $a1, 8($sp)
+	sw $a2, 12($sp)
+	
+	move $t0, $a0
+	move $t1, $a1
+	move $t2, $a2
+	
+	li $t3, 0
+	
+	loop:
+	lw $a0, 0($t1)
+	lw $a1, 0($t2)
+	
+	jal prod2
+	sw $v0, 0($t0)
+	
+	beqz $a0, salta
+	beqz $a1, salta
+	
+	addi $t0, $t0, 4
+	addi $t1, $t1, 4
+	addi $t2, $t2, 4
+	addi $t3, $t3, 1
+	j loop
+	
+	salta:
+	lw $ra 0($sp)
+	move $v0, $t3
+	jr $ra
+
+prod2:
+	#int prod2(int a, int b)
+	# a0 = a
+	# a1 = b
+	
+	mult $a0, $a1
+	mflo $v0
+	jr $ra
+
+exit:
+	li $v0, 10
+	syscall

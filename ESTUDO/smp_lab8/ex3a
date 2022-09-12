@@ -1,0 +1,27 @@
+.data
+frase: .asciiz "aaaabbbccdeeiiiooo"
+.text
+
+findchar:
+	la $s0, frase
+	li $s1, 34
+	
+	li $v0, 12
+	syscall
+	move $t0, $v0
+	
+	li $t9, 0
+	loop:
+		lb $t1, 0($s0)
+		addi $s0, $s0, 1
+		bne $t1, $t0, salta
+		addi $t9, $t9, 1
+	salta:
+		addi $s1, $s1, -1
+		bne $s1, $0, loop
+	move $a0, $t9
+	li $v0, 1
+	syscall
+exit:
+	li $v0, 10
+	syscall

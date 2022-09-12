@@ -1,0 +1,60 @@
+.data
+tab: .word 1, 2, 3, 4, 5
+somatorio: .space 10
+produtorio: .space 10
+
+.text
+
+main:
+
+
+
+	j exit
+
+calcula_prod_sum:
+	# int calcula_prod_sum(int *tab, int n, int *prod, int *sum)
+	addi $sp, $sp, -20
+	sw $ra, 0($sp)
+	sw $a0, 4($sp)
+	sw $a1, 8($sp)
+	sw $a2, 12($sp)
+	sw $a3, 16($sp)
+
+	
+	loop_CPS:
+	lw $t0, 0($a0)
+
+
+
+	addi $a0, $a0, 4
+	addi $a1, $a1, -1
+	bnez $a1, loop_CPS
+	
+	
+	addi $sp, $sp, 20
+	lw $ra, 0($sp)
+	lw $a0, 4($sp)
+	lw $a1, 8($sp)
+	lw $a2, 12($sp)
+	lw $a3, 16($sp)
+	jr $ra
+
+contemnulo:
+	# int contemnul(int *tab, int n)
+	li $v0, 0
+	
+	loop_CN:
+	lw $t0, 0($a0)
+	bnez $t0, salta
+	li $v0, 1
+	
+	salta:
+	addi $a0, $a0, 4
+	addi $a1, $a1, -1
+	bnez $a1, loop_CN
+
+	jr $ra
+
+exit:
+	li $v0, 10
+	syscall
